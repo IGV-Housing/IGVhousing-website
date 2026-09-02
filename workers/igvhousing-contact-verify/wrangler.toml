@@ -1,0 +1,6 @@
+name = "igvhousing-contact-verify"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# Secret, set via CLI rather than committed here:
+#   wrangler secret put RECAPTCHA_SECRET_IGVHOUSING
