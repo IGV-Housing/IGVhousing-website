@@ -1,0 +1,8 @@
+name = "igvhousing-router"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+routes = [
+  { pattern = "igvhousing.com/*", zone_name = "igvhousing.com" },
+  { pattern = "www.igvhousing.com/*", zone_name = "igvhousing.com" },
+]
