@@ -182,14 +182,19 @@
   .conv-out p{position:absolute; top:calc(100% + 16px); left:50%; transform:translateX(-50%); width:260px; text-align:center; margin:0; font-size:14.5px; line-height:1.4; font-weight:600; color:var(--cream); text-wrap:balance;}
   .conv-out .diff-icon svg{transform-origin:50% 50%; animation:diffThrob 2.6s ease-in-out infinite;}
   @keyframes diffThrob{0%,100%{transform:scale(1); opacity:.85;} 50%{transform:scale(1.12); opacity:1;}}
-  .conv-item, .conv-join, .conv-out{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
-  .conv-item.revealed, .conv-join.revealed, .conv-out.revealed{opacity:1; transform:translateY(0);}
+  .conv-item, .conv-out{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .conv-item.revealed, .conv-out.revealed{opacity:1; transform:translateY(0);}
   .conv-item:nth-child(1){transition-delay:0s;}
   .conv-item:nth-child(2){transition-delay:.1s;}
   .conv-item:nth-child(3){transition-delay:.2s;}
-  .conv-join{transition-delay:.32s;}
-  .conv-out{transition-delay:.46s;}
-  @media (prefers-reduced-motion: reduce){ .conv-item, .conv-join, .conv-out{opacity:1; transform:none; transition:none;} }
+  .conv-curves path{stroke-dasharray:1000; stroke-dashoffset:1000; transition:stroke-dashoffset .7s ease;}
+  .conv-curves path:nth-child(2){transition-delay:.08s;}
+  .conv-curves path:nth-child(3){transition-delay:.16s;}
+  .conv-join.lines-drawn .conv-curves path{stroke-dashoffset:0;}
+  @media (prefers-reduced-motion: reduce){
+    .conv-item, .conv-out{opacity:1; transform:none; transition:none;}
+    .conv-curves path{stroke-dashoffset:0!important; transition:none;}
+  }
   @media (max-width:1260px){ .difference .wrap{display:block;} .conv{margin-top:30px; grid-template-columns:minmax(0,1fr) 130px 280px;} }
   @media (max-width:820px){
     .conv{grid-template-columns:1fr; margin-top:28px; padding-bottom:0;}
@@ -936,7 +941,7 @@
   })();
 
   (function () {
-    const cards = document.querySelectorAll('.division-card, .conv-item, .conv-join, .conv-out');
+    const cards = document.querySelectorAll('.division-card');
     if (!cards.length) return;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
@@ -956,6 +961,55 @@
       });
     }, { threshold: 0.2 });
     cards.forEach(c => observer.observe(c));
+  })();
+
+  (function () {
+    // "IGV difference" convergence graphic: the 3 input bubbles reveal first,
+    // then the connecting lines draw toward the center, then the platform
+    // icon + title appear once the lines arrive.
+    const conv = document.querySelector('.conv');
+    if (!conv) return;
+    const items = conv.querySelectorAll('.conv-item');
+    const join = conv.querySelector('.conv-join');
+    const paths = conv.querySelectorAll('.conv-curves path');
+    const out = conv.querySelector('.conv-out');
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function revealAll() {
+      items.forEach(i => i.classList.add('revealed'));
+      if (join) join.classList.add('lines-drawn');
+      if (out) out.classList.add('revealed');
+    }
+
+    if (prefersReducedMotion || !('IntersectionObserver' in window)) {
+      revealAll();
+      return;
+    }
+
+    const BUBBLES_TO_LINES_DELAY = 500; // let the 3 bubbles settle first
+    const LINE_DRAW_DURATION = 700;     // matches the CSS transition above
+    const LINE_STAGGER = 80;            // matches the nth-child delays above
+
+    function runSequence() {
+      items.forEach(i => i.classList.add('revealed'));
+      setTimeout(() => {
+        if (join) join.classList.add('lines-drawn');
+        const totalLineTime = LINE_DRAW_DURATION + (paths.length - 1) * LINE_STAGGER;
+        setTimeout(() => {
+          if (out) out.classList.add('revealed');
+        }, totalLineTime);
+      }, BUBBLES_TO_LINES_DELAY);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          runSequence();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    observer.observe(conv);
   })();
 
   (function () {
