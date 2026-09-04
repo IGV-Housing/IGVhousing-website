@@ -23,6 +23,8 @@ igvhousing/
 │   ├── municipalities/index.html
 │   ├── privacy/index.html
 │   ├── terms/index.html
+│   ├── robots.txt
+│   ├── sitemap.xml
 │   └── assets/
 │       └── img/
 ├── workers/
@@ -41,3 +43,17 @@ these differ from their original working-folder names
 The `igvhousing-website` Worker deploys as a Worker-with-static-assets via
 the root `wrangler.jsonc` (`assets.directory` points at `public`) — update
 that path after any structural change like this one.
+
+---
+
+## Crawling / AI indexing
+
+`robots.txt` allows all crawlers, with explicit entries for known AI
+crawlers (GPTBot, ChatGPT-User, OAI-SearchBot, ClaudeBot, Claude-Web,
+anthropic-ai, Google-Extended, PerplexityBot, CCBot, Bingbot) so the site
+can be crawled and cited by AI search/assistants as well as ranked by
+regular search engines. `sitemap.xml` lists the site's indexable pages.
+If Cloudflare's AI Crawl Control is enabled on this zone, check it isn't
+injecting conflicting `Disallow` rules for the same bots ahead of this
+file's `Allow` rules — that happened on igvhope.com and needed a
+dashboard change, not a repo change.
