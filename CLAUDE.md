@@ -21,7 +21,7 @@ The practical consequence: a fix to the nav, footer, or a design token has to be
 
 Design tokens (CSS custom properties on `:root`, redeclared per page): `--evergreen` (dark teal-green, primary brand color), `--cream` (off-white), `--coral` (orange accent), `--ink`, `--line`. Body font is Montserrat; serif accents use Bitter; both loaded per-page via a Google Fonts `<link>` with `display=optional` — that value is intentional (it fixes a CLS regression caused by the nav reflowing when the font swapped in late), so it can silently fall back to a system font on an uncached first load; that's an accepted trade-off, not a bug.
 
-Google Analytics (GA4, measurement ID `G-ZQCZQ9ZGE8`) is wired in via a `gtag.js` snippet duplicated at the top of every page's `<head>` — same caveat as the fonts link: it has to be copied into any new page, and isn't recoverable by looking at a shared file if it's ever missing from one.
+Google Analytics (GA4, measurement ID `G-90DKQVYM1G`) is wired in via a `gtag.js` snippet duplicated at the top of every page's `<head>` — same caveat as the fonts link: it has to be copied into any new page, and isn't recoverable by looking at a shared file if it's ever missing from one.
 
 Asset references are root-absolute (`/assets/img/...`, `/assets/docs/...`), never relative, since pages live at `/slug/` paths rather than as flat files. Page slugs under `public/` match the nav links used across the site and intentionally differ from their original working-folder names (e.g. `/accessibility/` was `accessibility-statement`, `/media/` was `media-resources`) — don't rename them back.
 
