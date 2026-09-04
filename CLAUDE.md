@@ -11,7 +11,7 @@ igvhousing.com — a static, self-contained HTML site. No build step, no bundler
 - **Local preview**: `npx serve public -l 4173` (there's a `.claude/launch.json` config named `static-preview` that wraps this for the Browser pane's `preview_start`)
 - **No install/build/lint/test step exists** — there is nothing to run beyond serving the static files
 - **Deploy the contact-verify worker**: from `workers/igvhousing-contact-verify/`, `wrangler deploy` (the reCAPTCHA secret is set once via `wrangler secret put RECAPTCHA_SECRET_IGVHOUSING`, not committed)
-- **The `igvhousing-website` Worker** (serves `public/`) deploys via Cloudflare's dashboard integration rather than a committed `wrangler.toml` — if you change the repo's structure (e.g. move `public/`), the dashboard's "Build output directory" setting needs updating too
+- **The `igvhousing-website` Worker** (serves `public/`) deploys as a Worker-with-static-assets, defined by the root `wrangler.jsonc` (`assets.directory` points at `public`) — if you change the repo's structure (e.g. move `public/`), update that path too. Cloudflare's build runs `npx wrangler versions upload` on push; without this file at the repo root, that command fails with "Missing entry-point to Worker script or to assets directory".
 
 ## Architecture
 

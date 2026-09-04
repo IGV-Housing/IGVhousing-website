@@ -38,7 +38,6 @@ these differ from their original working-folder names
 (`accessibility-statement`, `media-resources`, `municipality`,
 `privacy-policy`), so don't rename them back.
 
-The `igvhousing-website` Worker's build/deploy settings (build output
-directory, etc.) are configured in the Cloudflare dashboard rather than a
-committed `wrangler.toml` — confirm the **Build output directory** is set
-to `public` after any structural change like this one.
+The `igvhousing-website` Worker deploys as a Worker-with-static-assets via
+the root `wrangler.jsonc` (`assets.directory` points at `public`) — update
+that path after any structural change like this one.
