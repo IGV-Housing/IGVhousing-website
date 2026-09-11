@@ -28,7 +28,7 @@ igvhousing/
 │   └── assets/
 │       └── img/
 ├── workers/
-│   └── igvhousing-contact-verify/
+│   └── igvhousing-contactverify-stage/
 ├── .gitignore
 └── README.md
 ```

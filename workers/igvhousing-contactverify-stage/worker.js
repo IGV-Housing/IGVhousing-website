@@ -1,5 +1,5 @@
 /**
- * igvhousing-contact-verify
+ * igvhousing-contactverify-stage
  * Single-file Cloudflare Worker for the igvhousing.com contact form.
  *
  * Verifies a reCAPTCHA v3 token server-side, then forwards the submission
