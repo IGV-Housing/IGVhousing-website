@@ -1,4 +1,4 @@
-name = "igvhousing-contact-verify"
+name = "igvhousing-contactverify-stage"
 main = "worker.js"
 compatibility_date = "2025-01-01"
 

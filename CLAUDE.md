@@ -10,7 +10,7 @@ igvhousing.com — a static, self-contained HTML site. No build step, no bundler
 
 - **Local preview**: `npx serve public -l 4173` (there's a `.claude/launch.json` config named `static-preview` that wraps this for the Browser pane's `preview_start`)
 - **No install/build/lint/test step exists** — there is nothing to run beyond serving the static files
-- **Deploy the contact-verify worker**: from `workers/igvhousing-contact-verify/`, `wrangler deploy` (the reCAPTCHA secret is set once via `wrangler secret put RECAPTCHA_SECRET_IGVHOUSING`, not committed)
+- **Deploy the contact-verify worker**: from `workers/igvhousing-contactverify-stage/`, `wrangler deploy` (the reCAPTCHA secret is set once via `wrangler secret put RECAPTCHA_SECRET_IGVHOUSING`, not committed). Despite the `-stage` suffix, this is the real production worker the live contact form calls — the name is just a historical artifact, not an indication it's a staging/test deployment.
 - **The `igvhousing-website` Worker** (serves `public/`) deploys as a Worker-with-static-assets, defined by the root `wrangler.jsonc` (`assets.directory` points at `public`) — if you change the repo's structure (e.g. move `public/`), update that path too. Cloudflare's build runs `npx wrangler versions upload` on push; without this file at the repo root, that command fails with "Missing entry-point to Worker script or to assets directory".
 
 ## Architecture
@@ -32,4 +32,4 @@ Asset references are root-absolute (`/assets/img/...`, `/assets/docs/...`), neve
 
 ### Contact form flow
 
-`public/contact/index.html`'s form posts to the `igvhousing-contact-verify` Worker (`workers/igvhousing-contact-verify/worker.js`), which verifies a reCAPTCHA v3 token server-side (score threshold `0.5`, expected action `contact`), then forwards the submission to a hardcoded HubSpot form (portal `342997618`) via the HubSpot Forms API. CORS is locked to `https://www.igvhousing.com` and `https://igvhousing.com`. A honeypot field (`company_website`) silently no-ops on submission instead of erroring, so bots aren't tipped off.
+`public/contact/index.html`'s form posts to the `igvhousing-contactverify-stage` Worker (`workers/igvhousing-contactverify-stage/worker.js`, fetched from the JS constant `VERIFY_ENDPOINT` — keep this in sync with the Worker's actual deployed name, since a mismatch here fails silently as a misleading CORS error in the browser, not an obvious 404), which verifies a reCAPTCHA v3 token server-side (score threshold `0.5`, expected action `contact`), then forwards the submission to a hardcoded HubSpot form (portal `342997618`) via the HubSpot Forms API. CORS is locked to `https://www.igvhousing.com` and `https://igvhousing.com`. A honeypot field (`company_website`) silently no-ops on submission instead of erroring, so bots aren't tipped off.
