@@ -349,17 +349,6 @@
   .tab-panel .tab-link:hover{color:var(--coral);}
   .tab-panel img{border-radius:14px; width:100%; aspect-ratio:4/3; object-fit:cover;}
 
-  .help-banner{background:var(--coral); color:var(--cream); padding:56px 0;}
-  .help-banner-inner{display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap; opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease;}
-  .help-banner-inner.revealed{opacity:1; transform:translateY(0);}
-  @media (prefers-reduced-motion: reduce){ .help-banner-inner{opacity:1; transform:none; transition:none;} }
-  .help-banner-text{display:flex; align-items:center; gap:22px;}
-  .help-banner-icon{flex:0 0 auto; width:52px; height:52px; border-radius:50%; background:var(--cream); color:var(--evergreen); font-size:26px; font-weight:800; display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif;}
-  .help-banner-inner h2{font-size:clamp(1.3rem,2.2vw,1.7rem); font-weight:700; margin:0 0 8px; color:var(--cream);}
-  .help-banner-inner p{font-size:15px; line-height:1.5; margin:0; color:rgba(255,253,243,.9);}
-  .help-banner-inner .btn-solid{flex:0 0 auto; white-space:nowrap; background:var(--cream); color:var(--evergreen);}
-  .help-banner-inner .btn-solid:hover{background:#fff;}
-
   footer{background:var(--evergreen); color:var(--cream); padding:100px 0 40px;}
   .footer-cta{position:relative; margin-bottom:80px;}
   .footer-cta img{border-radius:16px; width:100%; aspect-ratio:21/9; object-fit:cover; display:block;}
@@ -728,27 +717,12 @@
   </div>
 </section>
 
-<section class="help-banner">
-  <div class="wrap">
-    <div class="help-banner-inner">
-      <div class="help-banner-text">
-        <div class="help-banner-icon" aria-hidden="true">?</div>
-        <div>
-          <h2>Not sure where to start?</h2>
-          <p>Our team can help you find the right pathway for your goals.</p>
-        </div>
-      </div>
-      <a href="/contact/" class="btn-solid">Talk to our team</a>
-    </div>
-  </div>
-</section>
-
 <footer>
   <div class="wrap">
     <div class="footer-cta">
       <img src="https://cdn.prod.website-files.com/6a21f36092d52c3a0746d96d/6a2b327de0da6fd1f39253c2_1212121.png" alt="" />
       <div class="footer-cta-bubble">
-        <h2>Every housing journey starts somewhere.</h2>
+        <h2>Not sure where to start?<br>Talk to our team to take the first step in your housing journey.</h2>
         <p>Whether you're building, investing, planning, or looking for a process into homeownership, there's a place for you in the IGV platform.</p>
         <a href="/contact/" class="btn-solid" style="color:var(--cream);">Talk to our team</a>
       </div>
@@ -1056,29 +1030,6 @@
       });
     }, { threshold: 0.2 });
     observer.observe(closer);
-  })();
-
-  (function () {
-    const banner = document.querySelector('.help-banner-inner');
-    if (!banner) return;
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) {
-      banner.classList.add('revealed');
-      return;
-    }
-    if (!('IntersectionObserver' in window)) {
-      banner.classList.add('revealed');
-      return;
-    }
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('revealed');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.2 });
-    observer.observe(banner);
   })();
 
   const tabBtns = document.querySelectorAll('.tab-btn');
