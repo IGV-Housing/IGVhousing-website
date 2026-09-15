@@ -271,6 +271,13 @@
   .esg-pillar-label{font-size:12.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--evergreen); margin-bottom:12px;}
   .esg-pillar-card .headline{color:var(--coral); font-weight:600; font-size:16.5px; line-height:1.4; margin:0 0 12px; min-height:2.8em;}
   .esg-pillar-card .desc{color:#4a4a4a; font-size:14px; line-height:1.6; margin:0 0 20px; min-height:6.4em;}
+  /* The min-heights above only exist to keep the three cards' bullet
+     lists aligned side-by-side in the 3-column grid; once the grid
+     collapses to one column there's nothing to align against, so they
+     just leave dead space. */
+  @media (max-width:900px){
+    .esg-pillar-card .headline, .esg-pillar-card .desc{min-height:0;}
+  }
   .esg-pillar-list{list-style:none; display:flex; flex-direction:column; gap:11px;}
   .esg-pillar-list li{display:flex; align-items:center; gap:10px; color:#333; font-size:14px; line-height:1.4;}
   .esg-pillar-list li::before{content:"✓"; flex:0 0 auto; width:18px; height:18px; border-radius:50%; background:var(--evergreen); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:var(--cream);}
