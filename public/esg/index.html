@@ -272,6 +272,13 @@
   .esg-pillar-label{font-size:12.5px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--evergreen); margin-bottom:12px;}
   .esg-pillar-card .headline{color:var(--coral); font-weight:600; font-size:16.5px; line-height:1.4; margin:0 0 12px; min-height:2.8em;}
   .esg-pillar-card .desc{color:#4a4a4a; font-size:14px; line-height:1.6; margin:0 0 20px; min-height:6.4em;}
+  /* The min-heights above only exist to keep the three cards' bullet
+     lists aligned side-by-side in the 3-column grid; once the grid
+     collapses to one column there's nothing to align against, so they
+     just leave dead space. */
+  @media (max-width:900px){
+    .esg-pillar-card .headline, .esg-pillar-card .desc{min-height:0;}
+  }
   .esg-pillar-list{list-style:none; display:flex; flex-direction:column; gap:11px;}
   .esg-pillar-list li{display:flex; align-items:center; gap:10px; color:#333; font-size:14px; line-height:1.4;}
   .esg-pillar-list li::before{content:"✓"; flex:0 0 auto; width:18px; height:18px; border-radius:50%; background:var(--evergreen); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:var(--cream);}
@@ -712,10 +719,10 @@
         <p class="headline">Building for a sustainable future.</p>
         <p class="desc">We reduce environmental impact through smarter design, efficient construction and responsible resource use.</p>
         <ul class="esg-pillar-list">
-          <li>Lower carbon construction</li>
-          <li>Energy efficient homes</li>
-          <li>Responsible sourcing</li>
-          <li>Waste reduction and circularity</li>
+          <li>BC Energy Step Code 4 / Net-Zero-ready, third-party certified</li>
+          <li>Port Alberni facility, CSA A277 certified</li>
+          <li>Engineered-timber SIPs system lowers embodied carbon</li>
+          <li>Factory delivery reduces on-site waste</li>
         </ul>
       </div>
 
@@ -727,10 +734,10 @@
         <p class="headline">Creating opportunity and stronger communities.</p>
         <p class="desc">We create lasting social value by increasing access to home ownership and supporting the wellbeing of the communities we serve.</p>
         <ul class="esg-pillar-list">
-          <li>More pathways to home ownership</li>
-          <li>Safe, quality homes</li>
-          <li>Local jobs and skills development</li>
-          <li>Community investment</li>
+          <li>SDG 1: addresses the barrier to long-term financial security</li>
+          <li>SDG 10: serves working renters and key-worker households excluded from ownership</li>
+          <li>SDG 11: delivers affordable, energy-efficient housing in BC communities</li>
+          <li>Triple insurance: income protection, rental shortfall, market buffer</li>
         </ul>
       </div>
 
@@ -742,10 +749,10 @@
         <p class="headline">Acting with integrity. Building trust.</p>
         <p class="desc">We uphold strong governance practices that ensure transparency, accountability and responsible decision-making.</p>
         <ul class="esg-pillar-list">
-          <li>Ethical business practices</li>
-          <li>Transparent reporting</li>
-          <li>Robust risk management</li>
-          <li>Accountable leadership</li>
+          <li>CMHC anchored financing</li>
+          <li>SPV ring-fencing per project</li>
+          <li>Four-tier risk governance, quarterly Risk and Audit Committee review</li>
+          <li>Reporting aligned with GRI, SASB, GRESB, ISSB-aligned climate disclosure</li>
         </ul>
       </div>
 
