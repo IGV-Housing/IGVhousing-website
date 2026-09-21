@@ -186,7 +186,7 @@
   .conv-inputs{display:grid; grid-template-rows:repeat(3,1fr); gap:14px;}
   .conv-item{display:flex; align-items:center; gap:14px; padding:12px 20px 12px 14px; border:1px solid rgba(255,253,243,.28); border-radius:999px;}
   .conv-join{position:relative; align-self:stretch; color:rgba(255,253,243,.32);}
-  .conv-curves{position:absolute; top:0; bottom:0; left:0; right:-140px; width:auto; height:100%; display:block; pointer-events:none;}
+  .conv-curves{position:absolute; top:0; bottom:0; left:0; right:-220px; width:auto; height:100%; display:block; pointer-events:none; overflow:visible;}
   .conv-out{position:relative; display:block;}
   .diff-icon{display:block; width:40px; height:40px; color:var(--coral); flex:0 0 auto;}
   .conv-out .diff-icon{display:block; width:48px; height:48px; margin:0 auto;}
@@ -992,15 +992,69 @@
     if (!conv) return;
     const items = conv.querySelectorAll('.conv-item');
     const join = conv.querySelector('.conv-join');
+    const curvesSvg = conv.querySelector('.conv-curves');
     const paths = conv.querySelectorAll('.conv-curves path');
     const out = conv.querySelector('.conv-out');
+    const hub = conv.querySelector('.conv-out .diff-icon svg circle[fill="currentColor"]');
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // The 3 lines' shared endpoint has to land exactly on the hub icon's
+    // center circle. .conv-item/.conv-out fade+slide in via a CSS
+    // transform, so mid-animation their boundingClientRect is offset from
+    // where they'll actually rest — back that offset out using the live
+    // transform matrix (works whether or not the reveal has started) so
+    // this stays correct at every width instead of a single hand-tuned
+    // pixel offset that only matched the desktop layout.
+    function currentTranslateY(el) {
+      const t = getComputedStyle(el).transform;
+      if (!t || t === 'none') return 0;
+      const m = t.match(/^matrix(3d)?\(([^)]+)\)$/);
+      if (!m) return 0;
+      const parts = m[2].split(',').map(s => parseFloat(s.trim()));
+      return m[1] ? parts[13] : parts[5];
+    }
+
+    function alignConvCurves() {
+      if (!curvesSvg || !join || !hub || items.length < 3 || paths.length < 3) return;
+      if (getComputedStyle(join).display === 'none') return; // hidden below 820px
+
+      const svgRect = curvesSvg.getBoundingClientRect();
+      if (svgRect.width < 1 || svgRect.height < 1) return;
+
+      const hubRect = hub.getBoundingClientRect();
+      const targetX = hubRect.left + hubRect.width / 2 - svgRect.left;
+      const targetY = hubRect.top + hubRect.height / 2 - currentTranslateY(out) - svgRect.top;
+
+      curvesSvg.setAttribute('viewBox', `0 0 ${svgRect.width} ${svgRect.height}`);
+      curvesSvg.removeAttribute('preserveAspectRatio');
+
+      const ctrl1X = targetX * 0.46;
+      const ctrl2X = targetX * 0.58;
+
+      paths.forEach((path, i) => {
+        const item = items[i];
+        const itemRect = item.getBoundingClientRect();
+        const startY = itemRect.top + itemRect.height / 2 - currentTranslateY(item) - svgRect.top;
+        if (Math.abs(startY - targetY) < 0.5) {
+          path.setAttribute('d', `M0 ${startY} L${targetX} ${targetY}`);
+        } else {
+          path.setAttribute('d', `M0 ${startY} C${ctrl1X} ${startY}, ${ctrl2X} ${targetY}, ${targetX} ${targetY}`);
+        }
+      });
+    }
 
     function revealAll() {
       items.forEach(i => i.classList.add('revealed'));
+      alignConvCurves();
       if (join) join.classList.add('lines-drawn');
       if (out) out.classList.add('revealed');
     }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(alignConvCurves, 100);
+    });
 
     if (prefersReducedMotion || !('IntersectionObserver' in window)) {
       revealAll();
@@ -1014,6 +1068,7 @@
     function runSequence() {
       items.forEach(i => i.classList.add('revealed'));
       setTimeout(() => {
+        alignConvCurves();
         if (join) join.classList.add('lines-drawn');
         const totalLineTime = LINE_DRAW_DURATION + (paths.length - 1) * LINE_STAGGER;
         setTimeout(() => {
@@ -1025,6 +1080,7 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
+          alignConvCurves();
           runSequence();
           observer.unobserve(entry.target);
         }
