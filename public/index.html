@@ -188,6 +188,7 @@
   .conv-item{display:flex; align-items:center; gap:14px; padding:12px 20px 12px 14px; border:1px solid rgba(255,253,243,.28); border-radius:999px;}
   .conv-join{position:relative; align-self:stretch; color:rgba(255,253,243,.32);}
   .conv-curves{position:absolute; top:0; bottom:0; left:0; right:-140px; width:auto; height:100%; display:block; pointer-events:none;}
+  .conv-curves--mobile{display:none;}
   .conv-out{position:relative; display:block;}
   .diff-icon{display:block; width:40px; height:40px; color:var(--coral); flex:0 0 auto;}
   .conv-out .diff-icon{display:block; width:48px; height:48px; margin:0 auto;}
@@ -216,8 +217,10 @@
     .conv-out .diff-icon{margin:0;}
     .conv-out p{position:static; transform:none; width:auto; text-align:left;}
     .conv-item{padding:12px 20px 12px 14px;}
-    .conv-join{display:none;}
-    .conv-out{margin-top:20px; padding-top:20px; border-top:1px solid var(--line-light);}
+    .conv-join{display:block; align-self:auto; height:44px; margin:0;}
+    .conv-curves--desktop{display:none;}
+    .conv-curves--mobile{display:block; position:absolute; inset:0; right:0; width:100%; height:100%;}
+    .conv-out{margin-top:0;}
   }
   @media (max-width:640px){ .difference{padding:60px 0;} .diff-icon{width:34px; height:34px;} .conv-out .diff-icon{width:40px; height:40px;} .conv-out p{font-size:14px;} }
   .stats-section{background:var(--evergreen); color:var(--cream); padding:24px 0 0;}
@@ -287,7 +290,7 @@
   .video-frame .playbtn{position:absolute; inset:0; margin:auto; width:110px; height:110px; border-radius:50%; background:rgba(18,18,18,.7); display:flex; align-items:center; justify-content:center;}
   .video-frame .playbtn::after{content:""; border-left:20px solid var(--cream); border-top:12px solid transparent; border-bottom:12px solid transparent; margin-left:6px;}
 
-  .problems{padding:120px 0; background:linear-gradient(135deg, var(--cream) 0%, var(--cream) 35%, #dbe3e6 100%);}
+  .problems{padding:120px 0; background:var(--cream);}
   .problems-layout{display:grid; grid-template-columns:1.15fr 1fr; column-gap:70px; row-gap:0; align-items:center;}
   .problems-layout h2{grid-column:1 / -1;}
   @media (max-width:900px){ .problems-layout{grid-template-columns:1fr; gap:50px;} }
@@ -539,7 +542,10 @@
           <p>A capital stack built to scale housing delivery.</p>
         </div>
       </div>
-      <div class="conv-join"><svg class="conv-curves" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 C46 14, 58 50, 100 50" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M0 50 L100 50" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M0 86 C46 86, 58 50, 100 50" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg></div>
+      <div class="conv-join">
+        <svg class="conv-curves conv-curves--desktop" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M0 14 C46 14, 58 50, 100 50" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M0 50 L100 50" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M0 86 C46 86, 58 50, 100 50" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+        <svg class="conv-curves conv-curves--mobile" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path d="M14 0 C14 46, 50 58, 50 100" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M50 0 L50 100" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M86 0 C86 46, 50 58, 50 100" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/></svg>
+      </div>
       <div class="conv-out">
         <span class="diff-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="24" cy="23" r="6.5" fill="currentColor"/><circle cx="24" cy="7" r="4"/><circle cx="9" cy="38" r="4"/><circle cx="39" cy="38" r="4"/><path d="M24 11v5.5"/><path d="M12.3 35.2l6.4-7.2"/><path d="M35.7 35.2l-6.4-7.2"/></svg></span>
         <p>An integrated platform that connects all the pieces to solve housing.</p>
