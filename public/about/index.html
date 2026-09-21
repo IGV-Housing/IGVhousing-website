@@ -258,7 +258,12 @@
   .founding-thesis .divider{width:56px; height:3px; background:var(--evergreen); margin:0 auto 60px; border-radius:2px;}
   .thesis-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:0;}
   @media (max-width:860px){ .thesis-grid{grid-template-columns:1fr; gap:50px;} }
-  .thesis-item{padding:0 30px; position:relative;}
+  .thesis-item{padding:0 30px; position:relative; opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease;}
+  .thesis-item.revealed{opacity:1; transform:translateY(0);}
+  .thesis-item:nth-child(1){transition-delay:0s;}
+  .thesis-item:nth-child(2){transition-delay:.15s;}
+  .thesis-item:nth-child(3){transition-delay:.3s;}
+  @media (prefers-reduced-motion: reduce){ .thesis-item{opacity:1; transform:none; transition:none;} }
   .thesis-item + .thesis-item::before{content:""; position:absolute; left:0; top:25%; bottom:25%; width:1px; background:rgba(18,72,72,.14);}
   @media (max-width:860px){ .thesis-item + .thesis-item::before{display:none;} }
   .thesis-icon-circle{width:76px; height:76px; border-radius:50%; background:rgba(26,72,72,.07); display:flex; align-items:center; justify-content:center; margin:0 auto 20px;}
@@ -576,8 +581,7 @@
     <nav class="links">
       <a href="#divisions" class="divisions" id="divisionsTrigger">IGV Divisions</a>
       <a href="#segments" class="divisions" id="segmentsTrigger">Who We Serve</a>
-      <a href="/about/" aria-current="page">About IGV</a>
-      <a href="/esg/">ESG Impact</a>
+      <a href="#about" class="divisions" id="aboutTrigger">About IGV</a>
       <a href="/media/">Media &amp; Resources</a>
       <a href="/contact/" class="cta-pill">Contact Us</a>
     </nav>
@@ -593,8 +597,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="#divisions" class="divisions" id="divisionsTriggerMobile">IGV Divisions</a>
     <a href="#segments" class="divisions" id="segmentsTriggerMobile">Who We Serve</a>
-    <a href="/about/" aria-current="page">About IGV</a>
-    <a href="/esg/">ESG Impact</a>
+    <a href="#about" class="divisions" id="aboutTriggerMobile">About IGV</a>
     <a href="/media/">Media &amp; Resources</a>
     <a href="/contact/" class="cta-pill">Contact Us</a>
   </div>
@@ -658,6 +661,29 @@
         <div class="name">Municipalities</div>
         <p>Partner with IGV to deliver more housing and expand homeownership in your community.</p>
         <span class="explore">Explore for Municipalities →</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="mega" id="aboutMenu">
+    <div class="mega-grid">
+      <a href="/about/" class="mega-card segment-card">
+        <img class="thumb" src="/assets/img/team-hero.jpg" alt="" />
+        <div class="name">About IGV</div>
+        <p>Our story, leadership and the integrated platform behind how we build, fund and own homes.</p>
+        <span class="explore">Explore About IGV →</span>
+      </a>
+      <a href="/esg/" class="mega-card segment-card">
+        <img class="thumb" src="/assets/img/esg-hero.jpg" alt="" />
+        <div class="name">ESG Impact</div>
+        <p>How our approach to environmental, social and governance responsibility shapes every home we deliver.</p>
+        <span class="explore">Explore ESG Impact →</span>
+      </a>
+      <a href="/careers/" class="mega-card segment-card">
+        <img class="thumb" src="/assets/img/careers-team-hero.jpg" alt="" />
+        <div class="name">Careers</div>
+        <p>Join the team building a more certain, more accessible path to homeownership.</p>
+        <span class="explore">Explore Careers →</span>
       </a>
     </div>
   </div>
@@ -816,7 +842,7 @@
   <div class="wrap">
     <div class="eyebrow">Our Founding Thesis</div>
     <h2>IGV addresses the three biggest challenges in housing</h2>
-    <div class="thesis-grid">
+    <div class="thesis-grid" id="thesisGrid">
       <div class="thesis-item">
         <div class="thesis-icon-circle">
           <svg viewBox="0 0 30 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="var(--evergreen)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -1218,6 +1244,21 @@
     whoweareObserver.observe(whoweareReveal);
   }
 
+  // Reveal the founding-thesis items individually, staggered top-down / left-to-right
+  const thesisGrid = document.getElementById('thesisGrid');
+  if (thesisGrid) {
+    const thesisItems = thesisGrid.querySelectorAll('.thesis-item');
+    const thesisObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          thesisItems.forEach((item) => item.classList.add('revealed'));
+          thesisObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+    thesisObserver.observe(thesisGrid);
+  }
+
   // Reveal the four value cards together when scrolled into view
   const valuesGrid = document.getElementById('valuesGrid');
   if (valuesGrid) {
@@ -1350,6 +1391,8 @@
   // Mega menu toggle (desktop + burger mode, shared logic)
   const megaMenu = document.getElementById('megaMenu');
   const segmentsMenu = document.getElementById('segmentsMenu');
+  const aboutMenu = document.getElementById('aboutMenu');
+  const allMegaPanels = [megaMenu, segmentsMenu, aboutMenu];
   const burgerBtn = document.getElementById('burgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
 
@@ -1363,8 +1406,7 @@
   }
 
   function openMega(panel, trigger){
-    const other = (panel === megaMenu) ? segmentsMenu : megaMenu;
-    other.classList.remove('open');
+    allMegaPanels.forEach(p => { if (p !== panel) p.classList.remove('open'); });
     const willOpen = !panel.classList.contains('open');
     panel.classList.toggle('open', willOpen);
     clearTriggerState();
@@ -1380,8 +1422,10 @@
     }
   }
 
+  const panelByHash = { '#divisions': megaMenu, '#segments': segmentsMenu, '#about': aboutMenu };
+
   document.querySelectorAll('a.divisions').forEach(trigger => {
-    const panel = trigger.getAttribute('href') === '#segments' ? segmentsMenu : megaMenu;
+    const panel = panelByHash[trigger.getAttribute('href')] || megaMenu;
     trigger.setAttribute('aria-expanded', 'false');
     trigger.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1392,13 +1436,10 @@
 
   document.addEventListener('click', (e) => {
     if (e.target.closest('a.divisions')) return;
-    if (!megaMenu.contains(e.target)) {
-      megaMenu.classList.remove('open');
-    }
-    if (!segmentsMenu.contains(e.target)) {
-      segmentsMenu.classList.remove('open');
-    }
-    if (!megaMenu.classList.contains('open') && !segmentsMenu.classList.contains('open')) {
+    allMegaPanels.forEach(panel => {
+      if (!panel.contains(e.target)) panel.classList.remove('open');
+    });
+    if (!allMegaPanels.some(panel => panel.classList.contains('open'))) {
       clearTriggerState();
     }
   });
@@ -1406,8 +1447,7 @@
   // Mobile menu toggle
   burgerBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    megaMenu.classList.remove('open');
-    segmentsMenu.classList.remove('open');
+    allMegaPanels.forEach(panel => panel.classList.remove('open'));
     clearTriggerState();
     const isOpen = mobileMenu.classList.toggle('open');
     burgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
