@@ -211,9 +211,9 @@
   @media (max-width:1260px){ .difference .wrap{display:block;} .conv{margin-top:30px; grid-template-columns:minmax(0,1fr) 130px 280px;} }
   @media (max-width:820px){
     .conv{grid-template-columns:1fr; margin-top:28px; padding-bottom:0; position:relative;}
-    .conv-out{display:flex; flex-direction:column; align-items:flex-start; gap:12px;}
+    .conv-out{display:flex; flex-direction:column; align-items:center; gap:12px;}
     .conv-out .diff-icon{margin:0;}
-    .conv-out p{position:static; transform:none; width:auto; text-align:left;}
+    .conv-out p{position:static; transform:none; width:auto; text-align:center; max-width:420px;}
     .conv-item{padding:12px 20px 12px 14px; position:relative; z-index:1; background:var(--evergreen);}
     .conv-join{display:block; position:absolute; inset:0; align-self:auto; z-index:0;}
     .conv-curves{position:absolute; inset:0; right:0; width:100%; height:100%;}
@@ -1036,11 +1036,15 @@
         // converge-from-the-left layout used above 820px.
         paths.forEach((path, i) => {
           const item = items[i];
-          const icon = item.querySelector('.diff-icon') || item;
-          const iconRect = icon.getBoundingClientRect();
+          const itemRect = item.getBoundingClientRect();
           const ty = currentTranslateY(item);
-          const startX = iconRect.left + iconRect.width / 2 - svgRect.left;
-          const startY = iconRect.top + iconRect.height / 2 - ty - svgRect.top;
+          // Exit from the pill's own horizontal center (matching the
+          // centered hub below) rather than the icon's off-center
+          // position — the pill's opaque background hides the line
+          // until it clears the pill anyway, so only the exit angle
+          // beneath each pill actually reads visually.
+          const startX = itemRect.left + itemRect.width / 2 - svgRect.left;
+          const startY = itemRect.top + itemRect.height / 2 - ty - svgRect.top;
           const midY = startY + (targetY - startY) * 0.55;
           if (Math.abs(startX - targetX) < 0.5) {
             path.setAttribute('d', `M${startX} ${startY} L${targetX} ${targetY}`);
