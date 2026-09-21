@@ -97,11 +97,12 @@
   @media (max-width:1260px){ .mega.open{max-height:calc(100dvh - 76px); overflow-y:auto; -webkit-overflow-scrolling:touch;} }
   .mobile-menu a.divisions{cursor:pointer;}
   .mega-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:36px 32px; max-width:var(--max); margin:0 auto;}
+  .mega-grid.mega-grid-3{grid-template-columns:repeat(3,1fr); max-width:800px;}
   .mega-tagline{max-width:var(--max); margin:0 auto; padding:32px 32px 0; font-size:20px; line-height:1.35; font-weight:600; letter-spacing:-.01em; color:var(--evergreen); text-align:center;}
   .mega-tagline + .mega-grid{padding-top:22px;}
   @media (max-width:640px){ .mega-tagline{font-size:17px; padding:24px 20px 0;} }
-  @media (max-width:900px){ .mega-grid{grid-template-columns:repeat(2,1fr);} }
-  @media (max-width:560px){ .mega-grid{grid-template-columns:1fr;} }
+  @media (max-width:900px){ .mega-grid{grid-template-columns:repeat(2,1fr);} .mega-grid.mega-grid-3{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .mega-grid{grid-template-columns:1fr;} .mega-grid.mega-grid-3{grid-template-columns:1fr;} }
   .mega-card{display:flex; flex-direction:column; height:100%;}
   .mega-card .explore{margin-top:auto;}
   .mega-card img.thumb{border-radius:10px; aspect-ratio:16/10; object-fit:cover; margin-bottom:14px;}
@@ -705,6 +706,7 @@
   </div>
 
   <div class="mega" id="segmentsMenu">
+    <div class="mega-tagline">Making homes easier to build and possible to own.</div>
     <div class="mega-grid">
       <a href="https://www.igvbuild.com" target="_blank" class="mega-card segment-card">
         <img class="thumb" src="/assets/img/developers-builders.jpg" alt="" />
@@ -734,7 +736,8 @@
   </div>
 
   <div class="mega" id="aboutMenu">
-    <div class="mega-grid">
+    <div class="mega-tagline">Making homes easier to build and possible to own.</div>
+    <div class="mega-grid mega-grid-3">
       <a href="/about/" class="mega-card segment-card">
         <img class="thumb" src="/assets/img/team-hero.jpg" alt="" />
         <div class="name">About IGV</div>
