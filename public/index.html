@@ -287,7 +287,7 @@
   .video-frame .playbtn{position:absolute; inset:0; margin:auto; width:110px; height:110px; border-radius:50%; background:rgba(18,18,18,.7); display:flex; align-items:center; justify-content:center;}
   .video-frame .playbtn::after{content:""; border-left:20px solid var(--cream); border-top:12px solid transparent; border-bottom:12px solid transparent; margin-left:6px;}
 
-  .problems{padding:120px 0; background:linear-gradient(135deg, var(--cream) 0%, var(--cream) 35%, #dbe3e6 100%);}
+  .problems{padding:120px 0; background:linear-gradient(135deg, var(--cream) 0%, #dbe3e6 100%);}
   .problems-layout{display:grid; grid-template-columns:1.15fr 1fr; column-gap:70px; row-gap:0; align-items:center;}
   .problems-layout h2{grid-column:1 / -1;}
   @media (max-width:900px){ .problems-layout{grid-template-columns:1fr; gap:50px;} }
@@ -347,8 +347,10 @@
   .tab-panel .tab-list{list-style:none; margin:0 0 28px; padding:0; max-width:440px;}
   .tab-panel .tab-list li{position:relative; padding-left:22px; font-size:14.5px; line-height:1.6; color:rgba(255,253,243,.85); margin-bottom:12px;}
   .tab-panel .tab-list li::before{content:""; position:absolute; left:0; top:8px; width:8px; height:8px; border-radius:50%; background:var(--coral);}
-  .tab-panel .tab-link{font-weight:700; font-size:14.5px; color:var(--cream); transition:color .2s ease;}
+  .tab-panel .tab-link{font-weight:700; font-size:14.5px; color:var(--cream); transition:color .2s ease; position:relative; display:inline-block;}
+  .tab-panel .tab-link::after{content:""; position:absolute; left:0; bottom:-2px; width:0; height:1.5px; background:var(--coral); transition:width .25s ease;}
   .tab-panel .tab-link:hover{color:var(--coral);}
+  .tab-panel .tab-link:hover::after{width:100%;}
   .tab-panel img{border-radius:14px; width:100%; aspect-ratio:4/3; object-fit:cover;}
 
   footer{background:var(--evergreen); color:var(--cream); padding:100px 0 40px;}
@@ -550,7 +552,7 @@
     <div class="conv">
       <div class="conv-inputs">
         <div class="conv-item">
-          <span class="diff-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 42V25l9-6v6l9-6v6l9-6v17"/><path d="M36 42V13h6v29"/><path d="M3 42h42"/><path d="M12 34h3M21 34h3M30 34h3"/></svg></span>
+          <span class="diff-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 32h.02"/><path d="M32 32h.02"/><path d="M6 38a4 4 0 0 0 4 4h28a4 4 0 0 0 4-4V17a1 1 0 0 0-1.538-.844l-8.924 5.688A1 1 0 0 1 30 21v-4a1 1 0 0 0-1.538-.844L19.54 21.844A1 1 0 0 1 18 21V10a4 4 0 0 0-4-4H10a4 4 0 0 0-4 4z"/><path d="M16 32h.02"/></svg></span>
           <p>A $70m manufacturing facility built for speed and savings.</p>
         </div>
         <div class="conv-item">
