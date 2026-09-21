@@ -99,11 +99,12 @@
   @media (max-width:1260px){ .mega.open{max-height:calc(100dvh - 76px); overflow-y:auto; -webkit-overflow-scrolling:touch;} }
   .mobile-menu a.divisions{cursor:pointer;}
   .mega-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:24px; padding:36px 32px; max-width:var(--max); margin:0 auto;}
+  .mega-grid.mega-grid-3{grid-template-columns:repeat(3,1fr); max-width:800px;}
   .mega-tagline{max-width:var(--max); margin:0 auto; padding:32px 32px 0; font-size:20px; line-height:1.35; font-weight:600; letter-spacing:-.01em; color:var(--evergreen); text-align:center;}
   .mega-tagline + .mega-grid{padding-top:22px;}
   @media (max-width:640px){ .mega-tagline{font-size:17px; padding:24px 20px 0;} }
-  @media (max-width:900px){ .mega-grid{grid-template-columns:repeat(2,1fr);} }
-  @media (max-width:560px){ .mega-grid{grid-template-columns:1fr;} }
+  @media (max-width:900px){ .mega-grid{grid-template-columns:repeat(2,1fr);} .mega-grid.mega-grid-3{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .mega-grid{grid-template-columns:1fr;} .mega-grid.mega-grid-3{grid-template-columns:1fr;} }
   .mega-card{display:flex; flex-direction:column; height:100%;}
   .mega-card .explore{margin-top:auto;}
   .mega-card img.thumb{border-radius:10px; aspect-ratio:16/10; object-fit:cover; margin-bottom:14px;}
@@ -616,8 +617,7 @@
     <nav class="links">
       <a href="#divisions" class="divisions" id="divisionsTrigger">IGV Divisions</a>
       <a href="#segments" class="divisions" id="segmentsTrigger">Who We Serve</a>
-      <a href="/about/" aria-current="page">About IGV</a>
-      <a href="/esg/">ESG Impact</a>
+      <a href="#about" class="divisions" id="aboutTrigger">About IGV</a>
       <a href="/media/">Media &amp; Resources</a>
       <a href="/contact/" class="cta-pill">Contact Us</a>
     </nav>
@@ -633,8 +633,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="#divisions" class="divisions" id="divisionsTriggerMobile">IGV Divisions</a>
     <a href="#segments" class="divisions" id="segmentsTriggerMobile">Who We Serve</a>
-    <a href="/about/" aria-current="page">About IGV</a>
-    <a href="/esg/">ESG Impact</a>
+    <a href="#about" class="divisions" id="aboutTriggerMobile">About IGV</a>
     <a href="/media/">Media &amp; Resources</a>
     <a href="/contact/" class="cta-pill">Contact Us</a>
   </div>
@@ -674,6 +673,7 @@
   </div>
 
   <div class="mega" id="segmentsMenu">
+    <div class="mega-tagline">Making homes easier to build and possible to own.</div>
     <div class="mega-grid">
       <a href="https://www.igvbuild.com" target="_blank" class="mega-card segment-card">
         <img class="thumb" src="/assets/img/developers-builders.jpg" alt="" />
@@ -698,6 +698,30 @@
         <div class="name">Municipalities</div>
         <p>Partner with IGV to deliver more housing and expand homeownership in your community.</p>
         <span class="explore">Explore for Municipalities →</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="mega" id="aboutMenu">
+    <div class="mega-tagline">Making homes easier to build and possible to own.</div>
+    <div class="mega-grid mega-grid-3">
+      <a href="/about/" class="mega-card segment-card">
+        <img class="thumb" src="/assets/img/team-hero.jpg" alt="" />
+        <div class="name">About IGV</div>
+        <p>Our story, leadership and the integrated platform behind how we build, fund and own homes.</p>
+        <span class="explore">Explore About IGV →</span>
+      </a>
+      <a href="/esg/" class="mega-card segment-card">
+        <img class="thumb" src="/assets/img/esg-hero.jpg" alt="" />
+        <div class="name">ESG Impact</div>
+        <p>How our approach to environmental, social and governance responsibility shapes every home we deliver.</p>
+        <span class="explore">Explore ESG Impact →</span>
+      </a>
+      <a href="/careers/" class="mega-card segment-card">
+        <img class="thumb" src="/assets/img/careers-team-hero.jpg" alt="" />
+        <div class="name">Careers</div>
+        <p>Join the team building a more certain, more accessible path to homeownership.</p>
+        <span class="explore">Explore Careers →</span>
       </a>
     </div>
   </div>
@@ -1095,6 +1119,8 @@
   // Mega menu toggle (desktop + burger mode, shared logic)
   const megaMenu = document.getElementById('megaMenu');
   const segmentsMenu = document.getElementById('segmentsMenu');
+  const aboutMenu = document.getElementById('aboutMenu');
+  const allMegaPanels = [megaMenu, segmentsMenu, aboutMenu];
   const burgerBtn = document.getElementById('burgerBtn');
   const mobileMenu = document.getElementById('mobileMenu');
 
@@ -1108,8 +1134,7 @@
   }
 
   function openMega(panel, trigger){
-    const other = (panel === megaMenu) ? segmentsMenu : megaMenu;
-    other.classList.remove('open');
+    allMegaPanels.forEach(p => { if (p !== panel) p.classList.remove('open'); });
     const willOpen = !panel.classList.contains('open');
     panel.classList.toggle('open', willOpen);
     clearTriggerState();
@@ -1125,8 +1150,10 @@
     }
   }
 
+  const panelByHash = { '#divisions': megaMenu, '#segments': segmentsMenu, '#about': aboutMenu };
+
   document.querySelectorAll('a.divisions').forEach(trigger => {
-    const panel = trigger.getAttribute('href') === '#segments' ? segmentsMenu : megaMenu;
+    const panel = panelByHash[trigger.getAttribute('href')] || megaMenu;
     trigger.setAttribute('aria-expanded', 'false');
     trigger.addEventListener('click', (e) => {
       e.preventDefault();
@@ -1137,13 +1164,10 @@
 
   document.addEventListener('click', (e) => {
     if (e.target.closest('a.divisions')) return;
-    if (!megaMenu.contains(e.target)) {
-      megaMenu.classList.remove('open');
-    }
-    if (!segmentsMenu.contains(e.target)) {
-      segmentsMenu.classList.remove('open');
-    }
-    if (!megaMenu.classList.contains('open') && !segmentsMenu.classList.contains('open')) {
+    allMegaPanels.forEach(panel => {
+      if (!panel.contains(e.target)) panel.classList.remove('open');
+    });
+    if (!allMegaPanels.some(panel => panel.classList.contains('open'))) {
       clearTriggerState();
     }
   });
@@ -1151,8 +1175,7 @@
   // Mobile menu toggle
   burgerBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    megaMenu.classList.remove('open');
-    segmentsMenu.classList.remove('open');
+    allMegaPanels.forEach(panel => panel.classList.remove('open'));
     clearTriggerState();
     const isOpen = mobileMenu.classList.toggle('open');
     burgerBtn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
