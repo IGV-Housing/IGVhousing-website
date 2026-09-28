@@ -292,7 +292,7 @@
   .video-frame .playbtn{position:absolute; inset:0; margin:auto; width:110px; height:110px; border-radius:50%; background:rgba(18,18,18,.7); display:flex; align-items:center; justify-content:center;}
   .video-frame .playbtn::after{content:""; border-left:20px solid var(--cream); border-top:12px solid transparent; border-bottom:12px solid transparent; margin-left:6px;}
 
-  .problems{padding:120px 0; background:linear-gradient(135deg, var(--cream) 0%, #dbe3e6 100%);}
+  .problems{padding:120px 0; background:var(--cream);}
   .problems-layout{display:grid; grid-template-columns:1.15fr 1fr; column-gap:70px; row-gap:0; align-items:center;}
   .problems-layout h2{grid-column:1 / -1;}
   @media (max-width:900px){ .problems-layout{grid-template-columns:1fr; gap:50px;} }
@@ -327,7 +327,7 @@
 
   .system-banner{background:var(--coral); color:var(--cream); position:relative; min-height:210px; display:flex; align-items:center; overflow:hidden;}
   .system-banner-img{position:absolute; left:0; top:0; height:100%; width:520px; object-fit:cover; display:block; -webkit-mask-image:linear-gradient(to right, #000 55%, transparent 100%); mask-image:linear-gradient(to right, #000 55%, transparent 100%);}
-  .system-banner .wrap{padding-left:calc(520px * 0.55 + 56px);}
+  .system-banner .wrap{padding-left:560px;}
   .system-banner-copy h2{font-size:clamp(1rem,1.6vw,1.25rem); font-weight:700; line-height:1.4; margin:0; color:var(--cream);}
   @media (max-width:860px){
     .system-banner{display:block; position:relative; min-height:0;}
