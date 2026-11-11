@@ -451,6 +451,11 @@
   @media (max-width:700px){
     .footer-cta-bubble{position:static; margin-top:-36px; left:auto; right:auto; bottom:auto; max-width:none; width:calc(100% - 32px); margin-left:16px;}
   }
+  /* Burger mode: no photo, just the text box. */
+  @media (max-width:1260px){
+    .footer-cta img{display:none;}
+    .footer-cta-bubble{position:static; margin:0; width:auto; max-width:none;}
+  }
 
   .footer-links{display:grid; grid-template-columns:repeat(3,1fr); gap:32px; padding-top:0; margin-bottom:70px;}
   @media (max-width:760px){ .footer-links{grid-template-columns:repeat(2,1fr);} }
